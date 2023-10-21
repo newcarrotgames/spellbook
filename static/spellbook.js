@@ -25,12 +25,14 @@ function post(url, vars, callback) {
 	xhttp.send(JSON.stringify(vars));
 }
 
-function getNextScene(previousScene) {
+function getNextScene(previousScene, userPrompt) {
 	let sceneVars = {
-		previousScene: previousScene
+		previousScene: previousScene,
+		userPrompt: userPrompt
 	};
 	post("/scene", sceneVars, (sceneResponse) => {
 		var sceneElem = document.createElement("div");
+		sceneElem.setAttribute("class", "scene");
 		sceneElem.innerHTML = sceneResponse;
 		previousSceneGlobal = sceneResponse;
 		// add to content
@@ -79,9 +81,10 @@ function main() {
 	// });
 
 	// get initial scene
-	getNextScene("");
+	getNextScene("", "");
 
 	document.getElementById("go").addEventListener("click", (event) => {
-		getNextScene(previousSceneGlobal);
+		let userPrompt = document.getElementById("input").value;
+		getNextScene(previousSceneGlobal, userPrompt);
 	});
 }

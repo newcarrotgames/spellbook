@@ -43,6 +43,11 @@ body {
 	display: block;
 }
 
+.scene {
+	margin: 20px;
+	text-align: justify;
+}
+
 #debug {
 	position: fixed;
 	bottom: 0;

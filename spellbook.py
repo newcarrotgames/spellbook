@@ -16,7 +16,9 @@ shadows. You take a deep breath and step forward, determined to find the artifac
 
 SETTING_PROMPT = """Please provide the setting of the following scene in as few words as possible: """
 
-STORYTELLER_PROMPT = """You are an interactive storyteller."""
+STORYTELLER_PROMPT = """You are a game master telling a story from the user's perspective. There is only one user. End each scene with the following text: 'What do you want to do?' Here is the story so far: """
+
+SUMMARIZE_PROMPT = """Please summarize the following scene in as few words as possible: """
 
 @app.route("/")
 def main():
@@ -25,17 +27,23 @@ def main():
 @app.route("/scene", methods=['POST'])
 def scene():
     previousScene = request.json.get('previousScene')
-    if previousScene == None:
+    if previousScene == "":
+        print("using initial prompt as previous scene")
         previousScene = INITIAL_PROMPT
+    print("previousScene: " + str(previousScene))
+    userPrompt = request.json.get('userPrompt')
+    print("userPrompt: " + str(userPrompt))
+    messages=[
+        {"role": "system", "content": STORYTELLER_PROMPT + previousScene},
+    ]
+    if userPrompt != "":
+        messages.append({"role": "user", "content": userPrompt})
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": STORYTELLER_PROMPT},
-            {"role": "assistant", "content": previousScene},
-        ]
+        messages=messages
     )
     parsed_response = json.loads(str(response.choices[0].message))
-    if previousScene != None:
+    if userPrompt != "":
         return parsed_response['content']
     return previousScene + parsed_response['content']
 
@@ -61,3 +69,16 @@ def illustrate():
         size="1024x1024"
     )
     return response['data'][0]['url']
+
+@app.route("/summarize", methods=['POST'])
+def summarize():
+    scene = request.json.get('scene')
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": SUMMARIZE_PROMPT},
+            {"role": "user", "content": scene}
+        ]
+    )
+    parsed_response = json.loads(str(response.choices[0].message))
+    return parsed_response['content']
