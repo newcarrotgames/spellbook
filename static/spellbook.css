@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Comforter Brush&display=swap');
+
+body {
+	background-color: #000000;
+	color: #FFFFFF;
+	font-family: "Lucida Console", Monaco, monospace;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+}
+
+.title {
+	font-size: 48px;
+	font-weight: bold;
+	text-align: center;
+	font-family: 'Comforter Brush', cursive;
+}
+
+#user-input {
+	width: 50%;
+	margin: 10px auto;
+}
+
+#user-input input {
+	width: 90%;
+}
+
+#content {
+	width: 50%;
+	margin: 10px auto;
+}
+
+#content img {
+	width: 400px;
+	height: 300px;
+	background-color: #DDD;
+	margin: 20px auto;
+	border-radius: 25px;
+	/* drop shadow */
+	-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	display: block;
+}
+
+#debug {
+	position: fixed;
+	bottom: 0;
+}
