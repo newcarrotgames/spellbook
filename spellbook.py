@@ -14,11 +14,11 @@ artifact hidden deep within its depths, said to grant immense power to whoever p
 However, the forest is known to be cursed, with many adventurers never returning from its 
 shadows. You take a deep breath and step forward, determined to find the artifact."""
 
-SETTING_PROMPT = """Please provide the setting of the following scene in as few words as possible: """
+SETTING_PROMPT = """Please provide the setting of the following scene in as few words as possible. Please be sure to include any characters, animals, or creatures mentioned in the scene. Keep in mind that the setting will need to include any important details for creating a proper illustration of the scene: """
 
 STORYTELLER_PROMPT = """You are a game master telling a story from the user's perspective. There is only one user. End each scene with the following text: 'What do you want to do?' Here is the story so far: """
 
-SUMMARIZE_PROMPT = """Please summarize the following scene in as few words as possible: """
+SUMMARIZE_PROMPT = """Please summarize the following scene: """
 
 @app.route("/")
 def main():
@@ -45,7 +45,7 @@ def scene():
     parsed_response = json.loads(str(response.choices[0].message))
     if userPrompt != "":
         return parsed_response['content']
-    return previousScene + parsed_response['content']
+    return previousScene + " " + parsed_response['content']
 
 @app.route("/setting", methods=['POST'])
 def setting():

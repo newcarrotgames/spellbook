@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Comforter Brush&display=swap');
 
 body {
-	background-color: #000000;
+	background-color: #222;
 	color: #FFFFFF;
 	font-family: "Lucida Console", Monaco, monospace;
 	font-size: 12px;
@@ -34,7 +34,7 @@ body {
 	width: 400px;
 	height: 300px;
 	background-color: #DDD;
-	margin: 20px auto;
+	margin: 20px auto 0;
 	border-radius: 25px;
 	/* drop shadow */
 	-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
@@ -46,6 +46,18 @@ body {
 .scene {
 	margin: 20px;
 	text-align: justify;
+}
+
+.illustration {
+	margin: 20px;
+	text-align: justify;
+}
+
+.caption {
+	font-style: italic;
+	text-align: center;
+	margin: 5px auto 20px;
+	width: 400px;
 }
 
 #debug {
