@@ -10,10 +10,11 @@ body {
 }
 
 .title {
-	font-size: 48px;
+	font-size: 102px;
 	font-weight: bold;
 	text-align: center;
 	font-family: 'Comforter Brush', cursive;
+	margin-bottom: 25px;
 }
 
 #user-input {

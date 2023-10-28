@@ -14,7 +14,9 @@ artifact hidden deep within its depths, said to grant immense power to whoever p
 However, the forest is known to be cursed, with many adventurers never returning from its 
 shadows. You take a deep breath and step forward, determined to find the artifact."""
 
-SETTING_PROMPT = """Please provide the setting of the following scene in as few words as possible. Please be sure to include any characters, animals, or creatures mentioned in the scene. Keep in mind that the setting will need to include any important details for creating a proper illustration of the scene: """
+ILLUSTRATION_PROMPT = """Please provide the setting of the following scene in as few words as possible. Please be sure to include any characters, animals, or creatures mentioned in the scene. Keep in mind that the setting will need to include any important details for creating a proper illustration of the scene: """
+
+SETTING_PROMPT = """Please provide the setting of the following scene in as few words as possible: """
 
 STORYTELLER_PROMPT = """You are a game master telling a story from the user's perspective. There is only one user. End each scene with the following text: 'What do you want to do?' Here is the story so far: """
 
@@ -62,13 +64,21 @@ def setting():
 
 @app.route("/illustrate", methods=['POST'])
 def illustrate():
-    setting = request.json.get('setting')
-    response = openai.Image.create(
-        prompt=setting,
+    scene = request.json.get('scene')
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": ILLUSTRATION_PROMPT},
+            {"role": "user", "content": scene}
+        ]
+    )
+    parsed_response = json.loads(str(response.choices[0].message))
+    image_response = openai.Image.create(
+        prompt=parsed_response['content'],
         n=1,
         size="1024x1024"
     )
-    return response['data'][0]['url']
+    return image_response['data'][0]['url']
 
 @app.route("/summarize", methods=['POST'])
 def summarize():

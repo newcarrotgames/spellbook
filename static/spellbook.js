@@ -33,13 +33,23 @@ function filterSettingResponse(settingResponse) {
 }
 
 function getNextScene(previousScene, userPrompt) {
+	// disable input while waiting for response
+	toggleInput();
+
 	let sceneVars = {
 		previousScene: previousScene,
 		userPrompt: userPrompt
 	};
+
+	// create scene element
+	var sceneElem = document.createElement("div");
+	sceneElem.setAttribute("class", "scene");
+	sceneElem.innerHTML = "Loading...";
+
+	// add to content
+	document.getElementById("content").appendChild(sceneElem);
+
 	post("/scene", sceneVars, (sceneResponse) => {
-		var sceneElem = document.createElement("div");
-		sceneElem.setAttribute("class", "scene");
 		sceneElem.innerHTML = sceneResponse;
 		previousSceneGlobal = sceneResponse;
 		
@@ -51,40 +61,56 @@ function getNextScene(previousScene, userPrompt) {
 			storyGlobal += summarizeResponse;
 		});
 
-		// add to content
-		document.getElementById("content").appendChild(sceneElem);
+		// create image and caption container element
+		var illustrationElem = document.createElement("div");
+		illustrationElem.setAttribute("class", "illustration");
+
+		// create image element
+		var imgElem = document.createElement("img");
+		imgElem.setAttribute("src", "/static/images/black.png");
+		imgElem.setAttribute("height", "400");
+		imgElem.setAttribute("width", "300");
+		illustrationElem.appendChild(imgElem);
+
+		// add to scene element
+		sceneElem.prepend(illustrationElem);
+
 		let sceneVars = {
 			scene: sceneResponse
 		};
+
 		post("/setting", sceneVars, (settingResponse) => {
 			settingResponse = filterSettingResponse(settingResponse);
-			let settingVars = {
-				setting: settingResponse
-			};
-			post("/illustrate", settingVars, (illustrateResponse) => {
-				// create image and caption container element
-				var illustrationElem = document.createElement("div");
-				illustrationElem.setAttribute("class", "illustration");
 
-				// create image element
-				var imgElem = document.createElement("img");
-				imgElem.setAttribute("src", illustrateResponse);
-				imgElem.setAttribute("height", "400");
-				imgElem.setAttribute("width", "300");
-				imgElem.setAttribute("alt", "settingResponse");
-				illustrationElem.appendChild(imgElem);
+			// create caption element
+			var captionElem = document.createElement("div");
+			captionElem.setAttribute("class", "caption");
+			captionElem.innerHTML = settingResponse;
+			illustrationElem.appendChild(captionElem);
 
-				// create caption element
-				var captionElem = document.createElement("div");
-				captionElem.setAttribute("class", "caption");
-				captionElem.innerHTML = settingResponse;
-				illustrationElem.appendChild(captionElem);
+			// set alt text for image
+			imgElem.setAttribute("alt", settingResponse);
+		});
 
-				// add to scene element
-				sceneElem.prepend(illustrationElem);
-			});
+		post("/illustrate", sceneVars, (illustrateResponse) => {
+			imgElem.setAttribute("src", illustrateResponse);
+			// make input available again
+			toggleInput();
 		});
 	});
+}
+
+function handleUserInput() {
+	let userPrompt = document.getElementById("input").value;
+	document.getElementById("input").value = "";
+	getNextScene(storyGlobal + " " + previousSceneGlobal, userPrompt);
+}
+
+function toggleInput() {
+	var inputElem = document.getElementById("input");
+	var goButton = document.getElementById("go");
+	inputElem.disabled = !inputElem.disabled;
+	goButton.disabled = !goButton.disabled;
 }
 
 function main() {
@@ -93,7 +119,11 @@ function main() {
 
 	// add event listener to go button
 	document.getElementById("go").addEventListener("click", (event) => {
-		let userPrompt = document.getElementById("input").value;
-		getNextScene(storyGlobal + " " + previousSceneGlobal, userPrompt);
+		handleUserInput();
+	});
+
+	document.getElementById("input").addEventListener("keyup", (event) => {
+		if (event.code === "Enter")
+			handleUserInput();
 	});
 }
