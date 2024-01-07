@@ -63,16 +63,14 @@ function getNextScene(previousScene, userPrompt) {
 
 		// create image and caption container element
 		var illustrationElem = document.createElement("div");
-		illustrationElem.setAttribute("class", "illustration");
+		illustrationElem.setAttribute("class", "illustration-container");
 
-		// create image element
-		var imgElem = document.createElement("img");
-		imgElem.setAttribute("src", "/static/images/black.png");
-		imgElem.setAttribute("height", "400");
-		imgElem.setAttribute("width", "300");
-		illustrationElem.appendChild(imgElem);
+		// create image placeholder element (loading animation)
+		var imgBkgElem = document.createElement("div");
+		imgBkgElem.setAttribute("class", "illustration-bkg");
+		illustrationElem.appendChild(imgBkgElem);
 
-		// add to scene element
+		// add illustration container to scene element
 		sceneElem.prepend(illustrationElem);
 
 		let sceneVars = {
@@ -86,14 +84,21 @@ function getNextScene(previousScene, userPrompt) {
 			var captionElem = document.createElement("div");
 			captionElem.setAttribute("class", "caption");
 			captionElem.innerHTML = settingResponse;
-			illustrationElem.appendChild(captionElem);
 
-			// set alt text for image
-			imgElem.setAttribute("alt", settingResponse);
+			// add caption to illustration container
+			illustrationElem.appendChild(captionElem);
 		});
 
 		post("/illustrate", sceneVars, (illustrateResponse) => {
+			// create image element
+			console.log(illustrateResponse);
+			var imgElem = document.createElement("img");
 			imgElem.setAttribute("src", illustrateResponse);
+			imgElem.setAttribute("class", "illustration");
+			imgElem.onload = () => {
+				imgBkgElem.appendChild(imgElem);
+			};
+			
 			// make input available again
 			toggleInput();
 		});
