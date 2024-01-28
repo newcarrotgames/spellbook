@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Comforter Brush&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
 
 body {
 	background-color: #222;
@@ -18,17 +19,21 @@ body {
 }
 
 #user-input {
-	width: 50%;
+	width: 600px;
 	margin: 10px auto;
 }
 
 #user-input input {
-	width: 90%;
+	width: 100%;
+	margin: 10px;
 }
 
+
 #content {
-	width: 50%;
-	margin: 10px auto;
+	width: 600px;
+  	margin: 10px auto;
+  	font-size: 1.2em;
+	font-family: 'Caveat', cursive;
 }
 
 .illustration-container {

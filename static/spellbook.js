@@ -113,20 +113,14 @@ function handleUserInput() {
 
 function toggleInput() {
 	var inputElem = document.getElementById("input");
-	var goButton = document.getElementById("go");
 	inputElem.disabled = !inputElem.disabled;
-	goButton.disabled = !goButton.disabled;
 }
 
 function main() {
 	// get initial scene
 	getNextScene("", "");
 
-	// add event listener to go button
-	document.getElementById("go").addEventListener("click", (event) => {
-		handleUserInput();
-	});
-
+	// press enter to take input
 	document.getElementById("input").addEventListener("keyup", (event) => {
 		if (event.code === "Enter")
 			handleUserInput();

@@ -21,11 +21,13 @@ starship \"Odyssey.\" Your journey to Mars is fraught with unforeseen challenges
 skills and determination. A mysterious signal from deep space redirects your mission, leading you to an 
 ancient alien artifact containing secrets about the universe's beginnings, possibly key to Earth's future."""
 
+INITIAL_PROMPT = """You're a gifted hacker in the neon-drenched, rain-slick streets of Metropolis Prime. By day, you're an anonymous tech worker, but by night, you become "Specter," a legend in the underground cyber-world. Tonight, your skills are put to the test when you stumble upon a cryptic code that could dismantle the corrupt corporate regime controlling the city. With the authorities and cyber-enhanced mercenaries on your tail,"""
+
 ILLUSTRATION_SYSTEM_PROMPT = """You are a writer charged with describing the setting of a single scene for use with a generative artificial intelligence. Be sure to include any characters, animals, or creatures mentioned in the scene, and any important details for creating a proper illustration of the scene."""
 
 SETTING_PROMPT = """Please describe the setting of the following scene in as few words as possible. The result will be used as the caption for an illustration as it is provided so please do not include headers or the word caption itself.: """
 
-STORYTELLER_PROMPT = """You are a game master telling a story from the user's perspective. There is only one user. End each scene with the following text: 'What do you want to do?' Here is the story so far: """
+STORYTELLER_PROMPT = """You are a game master telling a story from the user's perspective. There is only one user. Each completion needs to be as short as possbile. End each scene with the following text: 'What do you want to do?' Here is the story so far: """
 
 SUMMARIZE_PROMPT = """Please summarize the following scene: """
 
@@ -102,3 +104,6 @@ def summarize():
     )
     parsed_response = json.loads(str(response.choices[0].message))
     return parsed_response['content']
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
